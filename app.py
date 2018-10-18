@@ -43,9 +43,7 @@ seen_object_list = {}
 
 # Set up web application serving
 app = Flask(__name__, )
-# @app.route("/")
-# def hello():
-#     return render_template('mousecontrol.html')
+
 
 @app.route("/")
 def test():

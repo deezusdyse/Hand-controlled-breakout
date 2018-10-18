@@ -49,7 +49,7 @@ app = Flask(__name__, )
 
 @app.route("/")
 def test():
-    return render_template('mousecontrol.html')
+    return render_template('handcontrol.html')
 
 
 # Worker threads that process video frame

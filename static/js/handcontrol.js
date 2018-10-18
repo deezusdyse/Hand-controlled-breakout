@@ -16,7 +16,6 @@ var yMove = (Math.random()*5)+2;
 var ballRadius = 10;
 
 var socketurl = "ws://" + "127.0.0.1:5006";
-//console.log(" socket url ...", socketurl);
 
 var ws;
 var box, paddle; 
@@ -41,18 +40,17 @@ var pauseGame = false;
 var pauseGameAnimationDuration = 500;
 
 function pauseGamePlay() {
-	//console.log("paused game play");
+	
     pauseGame = !pauseGame;
-    //console.log("paused or not" + pauseGame);
+   
     if (pauseGame) {
-       // paddle.setLinearVelocity(Vec2(0, 0))
+       
         $(".pauseoverlay").show()
         $(".overlaycenter").animate({
             opacity: 1,
             fontSize: "4vw"
         }, pauseGameAnimationDuration, function () {});
-    } else {
-        //paddle.setLinearVelocity(Vec2(3, 0))
+    } else {       
 		
         $(".overlaycenter").animate({
             opacity: 0,
@@ -66,11 +64,10 @@ function pauseGamePlay() {
 
 
 function addUI() {
-    // Add keypress event listener to pause game
+   
     document.onkeyup = function (e) {
         var key = e.keyCode ? e.keyCode : e.which;
-        if (key == 32) {
-            //console.log("spacebar pressed")
+        if (key == 32) {       
             pauseGamePlay()
         }
         if (key == 83) {
@@ -85,11 +82,6 @@ $("input#sound").click(function () {
     soundtext = enableAudio ? "sound on" : "sound off";
     $(".soundofftext").text(soundtext)
 });
-
-
-///CREATE TOGGLE THAT PAUSES WHEN CLICKED
-
-// Function that creates scorebar and shows your current score (+1 for destroying a brick)
 
 function scorebar() {
 	if (!pauseGame) {
@@ -153,8 +145,7 @@ function getXCord(data) {
     data.forEach(function (point) {
         currentMap.set(point.id_label, { timestamp: Date.now() })
         if (!paddleBodies.has(point.id_label)) {
-            paddleMap.set(point.id, point)
-           
+            paddleMap.set(point.id, point)          
         }
         box = point.box;
         top = box[0] * windowHeight;
@@ -184,7 +175,7 @@ if (navigator.mediaDevices.getUserMedia === undefined) {
 
     
     return new Promise(function(resolve, reject) {
-      getUserMedia.call(navigator, constraints, resolve, reject);
+    	getUserMedia.call(navigator, constraints, resolve, reject);
     });
   }
 }
@@ -241,24 +232,22 @@ if (navigator.mediaDevices.getUserMedia) {
    console.log('getUserMedia supported.');
    var constraints = {audio: true}
    navigator.mediaDevices.getUserMedia (constraints)
-      .then(
-        function(stream) {
-           source = audioCtx.createMediaStreamSource(stream);
-           source.connect(analyser);
-           analyser.connect(distortion);
-           distortion.connect(biquadFilter);
-           biquadFilter.connect(gainNode);
-           convolver.connect(gainNode);
-           gainNode.connect(audioCtx.destination);
-          
+	.then(
+	function(stream) {
+	   source = audioCtx.createMediaStreamSource(stream);
+	   source.connect(analyser);
+	   analyser.connect(distortion);
+	   distortion.connect(biquadFilter);
+	   biquadFilter.connect(gainNode);
+	   convolver.connect(gainNode);
+	   gainNode.connect(audioCtx.destination);
 
-      })
+
+	})
       .catch( function(err) { console.log('The following gUM error occured: ' + err);})
 } else {
    console.log('getUserMedia not supported on your browser!');
 }
-
-
 
 var index = 0;
 var brickRow = [];
@@ -278,11 +267,11 @@ function storeBricks() {
 	if (!pauseGame) {
 		index ++;
 		analyser.fftSize = 256;
-    	var bufferLengthAlt = analyser.frequencyBinCount;
-    	var dataArrayAlt = new Uint8Array(bufferLengthAlt);
-    	analyser.getByteFrequencyData(dataArrayAlt);
-    
-    	var barHeight; // max is around 235
+		var bufferLengthAlt = analyser.frequencyBinCount;
+		var dataArrayAlt = new Uint8Array(bufferLengthAlt);
+		analyser.getByteFrequencyData(dataArrayAlt);
+
+		var barHeight; // max is around 235
 
 		if(index % 100 == 0) {		
 			var counter = index / 100;
@@ -390,10 +379,10 @@ var score = 0;
 var ballColor = randomColor();
 
 function randomColor() {
-    var r = 255*Math.random()|0,
-        g = 255*Math.random()|0,
-        b = 255*Math.random()|0;
-    return 'rgb(' + r + ',' + g + ',' + b + ')';
+	var r = 255*Math.random()|0,
+	g = 255*Math.random()|0,
+	b = 255*Math.random()|0;
+ 	return 'rgb(' + r + ',' + g + ',' + b + ')';
 }
 
 
@@ -406,9 +395,9 @@ function Paddle(x,y, timestamp, id) {
 	this.draw = function() {
 		ctx.beginPath();
    		ctx.rect(this.x, this.y, paddleWidth, paddleHeight);
-    	ctx.fillStyle = "#3498db";
-    	ctx.fill();
-    	ctx.closePath();				
+    		ctx.fillStyle = "#3498db";
+    		ctx.fill();
+    		ctx.closePath();				
 	}
 	
 	this.update = function(x_update) {
@@ -422,35 +411,35 @@ function animate() {
 		requestAnimationFrame(animate);
 		ctx.clearRect(0, 0, innerWidth, innerHeight);
 		paddle.update(x_coord);
-    	scorebar();
-    	ball();
-    	storeBricks();
+    		scorebar();
+    		ball();
+    		storeBricks();
 		updateBricks();
 		printBricks();
 		bricksCollision();
 		paddle.update(x_coord);
-    	if(xPos + xMove > canvas.width-ballRadius || xPos + xMove < ballRadius) {
-     	   xMove = -xMove;
-    	}
-    	if(yPos + yMove < ballRadius) {
-        	yMove = -yMove;
-    	}
-    	else if (yPos + yMove > canvas.height-ballRadius-offset) {
-        	if (xPos > x_coord && xPos < x_coord + paddleWidth) {
-            	yMove = -yMove;
-        	}
-        	else {
-        	}
-   			}
-    	if(paddleRight && x_coord < canvas.width-paddleWidth) {
-        	x_coord += 7.5;
-    	}
-    	else if(paddleLeft && x_coord > 0) {
-        	x_coord -= 7.5;
-    	}
-    	xPos += xMove;
-    	yPos += yMove;	
-    } 
+    		if(xPos + xMove > canvas.width-ballRadius || xPos + xMove < ballRadius) {
+     	   		xMove = -xMove;
+    			}
+		if(yPos + yMove < ballRadius) {
+			yMove = -yMove;
+		}
+		else if (yPos + yMove > canvas.height-ballRadius-offset) {
+			if (xPos > x_coord && xPos < x_coord + paddleWidth) {
+				yMove = -yMove;
+			}
+			else {
+			}
+				}
+		if(paddleRight && x_coord < canvas.width-paddleWidth) {
+			x_coord += 7.5;
+		}
+		else if(paddleLeft && x_coord > 0) {
+			x_coord -= 7.5;
+		}
+		xPos += xMove;
+		yPos += yMove;	
+	} 
 }  
 
 addUI();

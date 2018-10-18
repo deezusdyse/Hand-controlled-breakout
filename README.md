@@ -17,7 +17,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-View the game interface (hand control) in your browser - `http://localhost:5005/
+View the game interface (hand control) in your browser - http://localhost:5005/
 
 
 MIT License.

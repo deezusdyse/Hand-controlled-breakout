@@ -34,8 +34,8 @@ web_socket_client.socket_init(web_socket_client_url)
 # Create a worker thread that loads graph and
 # does detection on images in an input queue and puts it on an output queue
 
-label_path = "/Users/denisechai/Desktop/skyfall/hand_inference_graph/hand_label_map.pbtxt"
-frozen_graph_path = "/Users/denisechai/Desktop/skyfall/hand_inference_graph/frozen_inference_graph.pb"
+label_path = "../Hand-controlled-breakout/hand_label_map.pbtxt"
+frozen_graph_path = "../Hand-controlled-breakout/hand_inference_graph/frozen_inference_graph.pb"
 
 
 object_refresh_timeout = 3
